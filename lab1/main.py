@@ -135,19 +135,37 @@ def zadanie_4_5(image):
     rgb_reconstructed = np.dot(ycbcr_reconstructed - [0, 128, 128], inverse_matrix.T)
     rgb_reconstructed = np.clip(rgb_reconstructed, 0, 255).astype(np.uint8)
 
-    # Obliczanie błedu średniokwadratowego
-    def mse(original, reconstructed):
-        return np.mean((original.astype(np.float32) - reconstructed.astype(np.float32)) ** 2)
+    # Obliczanie błędu średniokwadratowego (MSE) pętlami
+    MSE_RGB = 0
+    MSE_Y = 0
+    MSE_Cb = 0
+    MSE_Cr = 0
 
-    mse_Y = mse(Y, ycbcr_reconstructed[:, :, 0])
-    mse_Cb = mse(Cb, Cb_up)
-    mse_Cr = mse(Cr, Cr_up)
-    mse_total = mse(image, rgb_reconstructed)
+    height, width, _ = image.shape
+    pixels = height * width  # Liczba pikseli w obrazie
 
-    print(f"MSE Y: {mse_Y:.4f}")
-    print(f"MSE Cb: {mse_Cb:.4f}")
-    print(f"MSE Cr: {mse_Cr:.4f}")
-    print(f"MSE Total: {mse_total:.4f}")
+    for x in range(height):
+        for y in range(width):
+            # Obliczanie MSE dla RGB
+            for c in range(3):
+                MSE_RGB += (float(image[x, y, c]) - float(rgb_reconstructed[x, y, c])) ** 2
+
+            # Obliczanie MSE dla poszczególnych składowych Y, Cb, Cr
+            MSE_Y += (float(Y[x, y]) - float(ycbcr_reconstructed[x, y, 0])) ** 2
+            MSE_Cb += (float(Cb[x, y]) - float(Cb_up[x, y])) ** 2
+            MSE_Cr += (float(Cr[x, y]) - float(Cr_up[x, y])) ** 2
+
+    # Normalizacja wartości MSE
+    MSE_RGB /= pixels * 3  # Dzielimy przez liczbę pikseli i liczbę kanałów
+    MSE_Y /= pixels
+    MSE_Cb /= pixels
+    MSE_Cr /= pixels
+
+    # Wyświetlenie wartości błędu
+    print(f"MSE RGB: {MSE_RGB:.4f}")
+    print(f"MSE Y: {MSE_Y:.4f}")
+    print(f"MSE Cb: {MSE_Cb:.4f}")
+    print(f"MSE Cr: {MSE_Cr:.4f}")
 
     # Wyświetlenie obrazów
     plt.figure(figsize=(10, 8))
@@ -163,13 +181,13 @@ def zadanie_4_5(image):
     plt.axis('off')
 
     plt.subplot(2, 3, 3)
-    plt.title('Składowa Cb (Downsampled)')
-    plt.imshow(Cb_down, cmap='gray')
+    plt.title('Składowa Cb (Upsampled)')
+    plt.imshow(Cb_up, cmap='gray')
     plt.axis('off')
 
     plt.subplot(2, 3, 4)
-    plt.title('Składowa Cr (Downsampled)')
-    plt.imshow(Cr_down, cmap='gray')
+    plt.title('Składowa Cr (Upsampled)')
+    plt.imshow(Cr_up, cmap='gray')
     plt.axis('off')
 
     plt.subplot(2, 3, 5)
@@ -180,21 +198,24 @@ def zadanie_4_5(image):
     plt.tight_layout()
     plt.show()
 
-
-while True:
-    print("Wpisz numer zadania:")
-    print("1 - Zadanie 1")
-    print("2 - Zadanie 2")
-    print("3 - Zadanie 3")
-    print("4 - Zadanie 4 oraz zadanie 5")
-    option = input()
-    if option == "1":
-        zadanie_1(loaded_image)
-    elif option == "2":
-        zadanie_2(loaded_image)
-    elif option == "3":
-        zadanie_3(loaded_image)
-    elif option == "4":
-        zadanie_4_5(loaded_image)
-    else:
-        print("Podano złą wartość")
+if __name__ == "__main__":
+    while True:
+        print("Wpisz numer zadania:")
+        print("1 - Zadanie 1")
+        print("2 - Zadanie 2")
+        print("3 - Zadanie 3")
+        print("4 - Zadanie 4 oraz zadanie 5")
+        print("0 - wyjście")
+        option = input()
+        if option == "1":
+            zadanie_1(loaded_image)
+        elif option == "2":
+            zadanie_2(loaded_image)
+        elif option == "3":
+            zadanie_3(loaded_image)
+        elif option == "4":
+            zadanie_4_5(loaded_image)
+        elif option == "0":
+            break
+        else:
+            print("Podano złą wartość")
