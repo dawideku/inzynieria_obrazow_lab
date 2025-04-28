@@ -34,7 +34,7 @@ def load_image(path, pad=False):
 def save_image(path, image):
     plt.imsave(path, image)
 
-def hide_message(image, message, nbits=1, spread_factor=2.0):
+def hide_message(image, message, nbits=1, spread_factor=1.0):
     nbits = clamp(nbits, 1, 8)
     shape = image.shape
     image = np.copy(image).flatten()
@@ -78,8 +78,7 @@ flat_pixels = original.size
 mse_values = []
 
 for n in range(1, 9):
-    needed_bits = int(flat_pixels * 0.75 / n) * n  # dla 75% obrazka
-    needed_bytes = math.ceil(needed_bits / 8)
+    needed_bytes = math.ceil(flat_pixels / 8)
     sample = lorem.text() * 6
     example_text = (sample * ((needed_bytes // len(sample)) + 1))[:needed_bytes]
     binary_message = encode_as_binary_array(example_text)
@@ -92,7 +91,6 @@ for n in range(1, 9):
     mse_values.append(mse)
     print(f"nbits={n}, MSE={mse:.2f}, saved to {save_path}")
 
-# ---------- WYKRES -----------------
 
 plt.figure()
 plt.plot(range(1, 9), mse_values, marker='o')
