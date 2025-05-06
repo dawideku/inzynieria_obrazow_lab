@@ -51,25 +51,34 @@ def plot_histogram(image, title="Histogram"):
     pixels = np.array(image)
     colors = ('r', 'g', 'b')
     plt.figure(figsize=(10, 5))
+
+    bin_edges = np.arange(0, 256)
+    bar_width = 4
+    offset = [-bar_width, 0, bar_width]
+
     for i, color in enumerate(colors):
-        hist, bins = np.histogram(pixels[:, :, i], bins=256, range=(0, 255))
-        plt.plot(hist, color=color)
+        hist, _ = np.histogram(pixels[:, :, i], bins=256, range=(0, 255))
+        plt.bar(bin_edges + offset[i], hist, width=bar_width, color=color, alpha=0.7, label=color.upper())
+
     plt.title(title)
-    plt.xlabel("Wartość koloru")
+    plt.xlabel("Wartość koloru (0–255)")
     plt.ylabel("Liczba pikseli")
+    plt.legend()
+    plt.tight_layout()
     plt.show()
+
 
 
 img = Image.open("images/color_image.jfif").convert("RGB")
 
 # Samo ograniczenie kolorów (bez ditheringu)
-reduced_img = reduce_colors(img, k=2)
+reduced_img = reduce_colors(img, k=4)
 reduced_img.save("reduced_output.png")
 reduced_img.show()
 
 # Dithering kolorowy
-dithered_img = floyd_steinberg_dithering_color(img, k=2)
-dithered_img.save("dithered_output.png")
+dithered_img = floyd_steinberg_dithering_color(img, k=4)
+dithered_img.save("dithered_output2.png")
 dithered_img.show()
 
 # Histogramy

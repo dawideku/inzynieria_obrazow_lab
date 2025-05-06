@@ -73,7 +73,7 @@ def draw_filled_triangle_interpolated(image, v0, color0, v1, color1, v2, color2)
 
 def ssaa(image, scale=2):
     width, height = image.size
-    work_image = Image.new("RGB", (width * scale, height * scale), (255, 255, 255))
+    work_image = Image.new("RGB", (width * scale, height * scale), (0, 0, 0))
 
     draw_line_interpolated(work_image, 50 * scale, 50 * scale, (255, 0, 0), 250 * scale, 100 * scale, (0, 0, 255))
     v0 = (100 * scale, 150 * scale)
@@ -91,3 +91,4 @@ image = Image.new("RGB", (width, height), (255, 255, 255))
 final_image = ssaa(image, scale=2)
 
 final_image.save("output_with_anti_aliasing.png")
+final_image.show("output_with_anti_aliasing.png")

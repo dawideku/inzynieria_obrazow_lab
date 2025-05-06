@@ -73,7 +73,7 @@ def draw_filled_triangle_interpolated(image, v0, color0, v1, color1, v2, color2)
 
 
 width, height = 300, 300
-image = Image.new("RGB", (width, height), (255, 255, 255))
+image = Image.new("RGB", (width, height), (0, 0, 0))
 
 draw_line_interpolated(image, 50, 50, (255, 0, 0), 250, 100, (0, 0, 255))
 
@@ -81,9 +81,10 @@ v0 = (100, 150)
 v1 = (200, 180)
 v2 = (150, 250)
 color0 = (255, 0, 0)
-color1 = (0, 255, 255)
-color2 = (255, 0, 255)
+color1 = (0, 255, 0)
+color2 = (0, 0, 255)
 
 draw_filled_triangle_interpolated(image, v0, color0, v1, color1, v2, color2)
 
 image.save("output.png")
+image.show("output.png")

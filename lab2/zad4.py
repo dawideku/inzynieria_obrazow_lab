@@ -39,7 +39,7 @@ def zigzag(block):
     return np.array([block[x, y] for x, y in zigzag_order])
 
 
-# ⬇️ DCT i kwantyzacja ⬇️
+# DCT i kwantyzacja
 def dct2(block):
     return dct(dct(block.T, norm='ortho').T, norm='ortho')
 
@@ -67,7 +67,7 @@ def get_quantization_matrix(QF):
     return Q
 
 
-# ⛓️ Główna pipeline JPEG
+# Główna pipeline JPEG
 def jpeg_pipeline(subsample_factor, QF):
     Q = get_quantization_matrix(QF)
 
@@ -126,7 +126,7 @@ def jpeg_pipeline(subsample_factor, QF):
     return len(buffer.getvalue()), img_encoded
 
 
-# 🔍 Testujemy dla różnych QF
+# Testujemy dla różnych QF
 factors = [1, 2, 4]
 qf_values = [20, 50, 80]
 

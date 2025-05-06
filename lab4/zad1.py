@@ -1,8 +1,8 @@
 import numpy as np
 from PIL import Image
 
-def find_closest_palette_color(value):
-    return round(value / 255) * 255
+def find_closest_palette_color(value, levels = 6):
+    return round((levels - 1) * value / 255) * (255 // (levels - 1))
 
 def floyd_steinberg_dithering(image):
     pixels = np.array(image, dtype=np.float32)
